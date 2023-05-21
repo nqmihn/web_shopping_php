@@ -1,0 +1,30 @@
+function checkEmptyCart() {
+        <?php
+        if (empty($_SESSION['cart'])) {
+        ?>
+            document.querySelector('.header__cart-notice').innerText = '0';
+            document.querySelector('.header__cart-list').classList.add("header__cart-list-no-cart");
+
+        <?php } else { ?>
+            document.querySelector('.header__cart-notice').innerText = '<?php echo $count; ?>';
+            document.querySelector('.header__cart-list').classList.remove("header__cart-list-no-cart");
+        <?php } ?>
+    }
+    checkEmptyCart()
+    $('.header__cart-item-remove').click(function() {
+        let btn = $(this)
+        let id_product = parseInt(btn.data('id'));
+        let li_parent = btn.parents('li');
+        $.ajax({
+            type: "GET",
+            url: "remove_cart.php",
+            data: {
+                id_product
+            },
+            success: function() {
+                li_parent.remove();
+                checkEmptyCart()
+            }
+        });
+
+    });
